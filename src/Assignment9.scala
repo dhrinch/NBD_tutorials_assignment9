@@ -9,6 +9,7 @@ object Assignment9 {
     a. getContent returning the stored value
     b. applyFunction accepting function A=>R and returning the result of application of this function to stored value*/
 
+    println("**************")
     val cont = new Container(10)
     println("Type of " +cont.getContent + " = " + cont.applyFunction(cont.getContent))
 
@@ -23,6 +24,7 @@ object Assignment9 {
     a single value of a given type. Create objects of both classes.
     Check if they both are subtypes of Maybe[_] (use isInstanceOf method parametrized with checked type)*/
 
+    println("**************")
     val no = new No
     val yes = new Yes("indeed")
     println("no is an instance of Maybe: " + no.isInstanceOf[Maybe[_]])
@@ -32,12 +34,18 @@ object Assignment9 {
     a. for No: No
     b. for Yes: Yes(f(stored value))*/
 
+    println("**************")
     println(no.ApplyFunction())
     println(yes.ApplyFunction("indeed"))
 
     /*4. Extend solution of task 3 with function getOrElse parametrized with type and returning:
     a. for No – parameter of getOrElse
     b. for Yes – content of Yes*/
+    println("**************")
+    val nope: getOrElse[No[_]] = new getOrElse[No[_]](new No)
+    println(nope.getOrElse)
+    val yep: getOrElse[Yes[String]] = new getOrElse[Yes[String]](new Yes("Yup, that's a yes"))
+    println(yep.getOrElse)
   }
 }
 
@@ -69,4 +77,13 @@ class Yes[A](val value: A) extends Maybe[A] {
     if (a.isEmpty) "No"
     else "Yes, " + a + " " + a.getClass
   }
+}
+
+class getOrElse[A](value: A) {
+  val _value: A = value
+  def getOrElse[B]: B =
+    _value match {
+      case _: Yes[_] => _value.asInstanceOf[Yes[A]]._value.asInstanceOf[B]
+      case _: No[A] => "Nothing to see here".asInstanceOf[B]
+    }
 }
